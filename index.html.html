@@ -40,10 +40,10 @@
   .dow .c.today b{background:var(--accent);color:var(--accent-ink);font-weight:400;}
   .dow.single .c{text-align:left;padding-left:12px;}
   .dow.single .c b{margin:3px 0 0;}
-  .allday{display:flex;padding:0 0 6px;}
+  .allday{display:flex;padding:0 0 6px;min-height:30px;}
   .allday .gut{width:44px;flex:none;}
   .allday .c{flex:1;min-width:0;padding:0 1px;display:flex;flex-direction:column;gap:2px;}
-  .chip{border-radius:4px;font-size:11px;font-weight:400;padding:2px 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;}
+  .chip{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;border-radius:4px;font-size:11px;font-weight:400;padding:2px 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;}
   .moretxt{font-size:10px;color:var(--ink-soft);padding:0 4px;}
   /* ----- day / week time grid: the page itself scrolls, nothing inside has its own scroll bar ----- */
   .tg{position:relative;display:flex;height:calc(var(--hour)*24);}
@@ -51,7 +51,7 @@
   .tg .labels span{position:absolute;right:6px;transform:translateY(-50%);font-size:12px;color:var(--ink-soft);}
   .tg .cols{flex:1;display:flex;position:relative;background-image:repeating-linear-gradient(to bottom, var(--line) 0, var(--line) 1px, transparent 1px, transparent var(--hour));background-size:100% var(--hour);}
   .tg .col{flex:1;position:relative;border-left:1px solid var(--line);}
-  .blk{position:absolute;border-radius:6px;padding:3px 5px;font-size:12px;line-height:1.2;overflow:hidden;cursor:pointer;border:1px solid var(--bg);}
+  .blk{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;position:absolute;border-radius:6px;padding:3px 5px;font-size:12px;line-height:1.2;overflow:hidden;cursor:pointer;border:1px solid var(--bg);}
   .blk b{display:block;font-weight:400;font-size:11.5px;overflow-wrap:anywhere;}
   .blk span{display:block;font-weight:300;opacity:0.85;font-size:11px;overflow-wrap:anywhere;}
   .nowline{position:absolute;left:0;right:0;height:2px;background:#fff;z-index:5;pointer-events:none;}
@@ -108,6 +108,10 @@
   .login p{text-align:center;color:var(--ink-soft);font-size:14px;margin:0 0 18px;}
   .evdetail a{color:var(--accent);font-weight:500;text-decoration:none;}
   #view{touch-action:pan-y;}
+  .blk.dragging{opacity:0.92;box-shadow:0 8px 22px rgba(0,0,0,0.7);outline:2px solid #fff;z-index:30;}
+  .chip.dragging{position:fixed;z-index:60;pointer-events:none;box-shadow:0 8px 22px rgba(0,0,0,0.7);outline:2px solid #fff;}
+  .mday.droptarget{background:rgba(138,180,248,0.25);}
+  #dragtip{position:fixed;left:50%;transform:translateX(-50%);top:calc(64px + env(safe-area-inset-top));background:#e8eaed;color:#202124;padding:8px 16px;border-radius:12px;font-size:14px;font-weight:400;z-index:70;pointer-events:none;white-space:nowrap;}
   .sw{display:flex;flex-wrap:wrap;gap:10px;}
   .sw button{width:36px;height:36px;border-radius:50%;border:2px solid transparent;padding:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;}
   .sw button.sel{border-color:#fff;box-shadow:0 0 0 2px var(--bg) inset;}
@@ -123,7 +127,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-auth-compat.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
 <script>
-const BUILD_VERSION = '2026-10-07-phone-calendar-4';
+const BUILD_VERSION = '2026-10-07-phone-calendar-5';
 firebase.initializeApp({
   apiKey: "AIzaSyDVpT49n-X6bkFIQCZJT9PQmBeeTRkHcDk",
   authDomain: "exterior-cleaning-co.firebaseapp.com",
@@ -155,7 +159,8 @@ if(!['day','week','month'].includes(mode)) mode = 'week';
 let cur = isoOf(new Date());             // the day we're looking at (the week / month is the one containing it)
 let scope = lsGet('scope') || 'mine';    // 'mine' | 'all'
 let editing = null, editingIsNew = false, toastTimer = null, menuOpen = '', slide = '';
-let HOUR = Math.max(30, Math.min(150, parseFloat(lsGet('hour')) || 56));   // px per hour in the day / week grid - pinch to change
+let userZoomed = !!parseFloat(lsGet('hour2'));
+let HOUR = userZoomed ? Math.max(24, Math.min(150, parseFloat(lsGet('hour2')))) : Math.max(30, (window.innerHeight - 180)/14);   // px per hour - starts so 06:00-20:00 fills the screen; pinch to change
 document.documentElement.style.setProperty('--hour', HOUR+'px');
 
 function lsGet(k){ try { return localStorage.getItem('ecccal_'+k); } catch(e){ return null; } }
@@ -268,7 +273,7 @@ function blockHtml(it){
   const e = it.e, col = eventColor(e), fg = textOn(col);
   const h = Math.max((it.end-it.start)/60*HOUR - 1, 22), w = 100/it.cols;
   const tall = h >= 46;
-  return `<div class="blk" data-ev="${esc(e.id)}" style="top:${it.start/60*HOUR}px;height:${h}px;left:${it.col*w}%;width:${w}%;background:${col};color:${fg};">
+  return `<div class="blk" data-ev="${esc(e.id)}" data-start="${it.start}" data-dur="${it.end-it.start}" style="top:calc(var(--hour)*${(it.start/60).toFixed(4)});height:max(calc(var(--hour)*${((it.end-it.start)/60).toFixed(4)} - 1px),22px);left:${it.col*w}%;width:${w}%;background:${col};color:${fg};">
     <b>${esc(e.title)}</b>${tall && e.location ? `<span>${esc(e.location)}</span>` : ''}${h>=70 && e.startTime ? `<span>${esc(e.startTime)}${e.endTime?' – '+esc(e.endTime):''}</span>` : ''}</div>`;
 }
 function chipHtml(e){ const col = eventColor(e); return `<div class="chip" data-ev="${esc(e.id)}" style="background:${col};color:${textOn(col)}">${esc(e.title)}</div>`; }
@@ -303,10 +308,10 @@ function renderCalendar(app){
     const single = days.length===1;
     const adMax = Math.max(0, ...days.map(i=> allDayOn(i).length));
     headerBottom = `<div class="dow ${single?'single':''}"><div class="gut"></div>${days.map(iso=>{ const d = parseIso(iso); return `<button class="c ${iso===todayIso?'today':''}" data-day="${iso}" aria-label="${esc(longDate(iso))}">${single ? DAYS[d.getDay()].slice(0,3).toUpperCase() : ['S','M','T','W','T','F','S'][d.getDay()]}<b>${d.getDate()}</b></button>`; }).join('')}</div>`
-      + (adMax ? `<div class="allday"><div class="gut"></div>${days.map(iso=>{ const l = allDayOn(iso), shown = l.slice(0,single?6:2), extra = l.length-shown.length; return `<div class="c">${shown.map(chipHtml).join('')}${extra>0?`<span class="moretxt">+${extra}</span>`:''}</div>`; }).join('')}</div>` : '');
-    const labels = Array.from({length:23},(_,i)=>`<span style="top:${(i+1)*HOUR}px">${pad(i+1)}:00</span>`).join('');
+      + (`<div class="allday"><div class="gut"></div>${days.map(iso=>{ const l = allDayOn(iso), shown = l.slice(0,single?6:2), extra = l.length-shown.length; return `<div class="c">${shown.map(chipHtml).join('')}${extra>0?`<span class="moretxt">+${extra}</span>`:''}</div>`; }).join('')}</div>`);
+    const labels = Array.from({length:23},(_,i)=>`<span style="top:calc(var(--hour)*${i+1})">${pad(i+1)}:00</span>`).join('');
     const nowMin = new Date().getHours()*60 + new Date().getMinutes();
-    body = `<div class="tg" id="body"><div class="labels">${labels}</div><div class="cols">${days.map(iso=>`<div class="col" data-col="${iso}">${layoutDay(timedOn(iso)).map(blockHtml).join('')}${iso===todayIso?`<div class="nowline" id="nowline" style="top:${nowMin/60*HOUR}px"></div>`:''}</div>`).join('')}</div></div>`;
+    body = `<div class="tg" id="body"><div class="labels">${labels}</div><div class="cols">${days.map(iso=>`<div class="col" data-col="${iso}">${layoutDay(timedOn(iso)).map(blockHtml).join('')}${iso===todayIso?`<div class="nowline" id="nowline" style="top:calc(var(--hour)*${(nowMin/60).toFixed(4)})"></div>`:''}</div>`).join('')}</div></div>`;
   }
   app.innerHTML = `
     <div class="top">
@@ -343,7 +348,8 @@ function go(n){          // next / previous day, week or month
   else cur = addDays(cur, n * (mode==='week' ? 7 : 1));
   slide = n>0 ? 'next' : 'prev'; render();
 }
-function scrollToHour(h){ const b = document.getElementById('body'); if(!b || mode==='month') return; const top = b.getBoundingClientRect().top + window.scrollY; window.scrollTo(0, Math.max(0, top - 150 + h*HOUR)); }
+function headerH(){ const t = document.querySelector('.top'); return t ? t.offsetHeight : 180; }
+function scrollToHour(h){ const b = document.getElementById('body'); if(!b || mode==='month') return; const top = b.getBoundingClientRect().top + window.scrollY; window.scrollTo(0, Math.max(0, top + h*HOUR - headerH())); }
 let lastScrollKey = '', keepY = 0;
 function wireCalendar(app){
   const q = sel=> app.querySelectorAll(sel);
@@ -358,51 +364,133 @@ function wireCalendar(app){
   const so = document.getElementById('signout'); if(so) so.onclick = ()=>{ menuOpen=''; started = false; auth.signOut(); };
   document.getElementById('fab').onclick = ()=> openEditor(null);
   // taps: an event opens it; a date number (week/day) or a month cell jumps to that day
-  q('[data-ev]').forEach(b=> b.onclick = ev=>{ ev.stopPropagation(); const e = events.find(x=>x.id===b.dataset.ev); if(e) openEditor(e); });
+  q('[data-ev]').forEach(b=> b.onclick = ev=>{ ev.stopPropagation(); if(Date.now()<suppressClickUntil) return; const e = events.find(x=>x.id===b.dataset.ev); if(e) openEditor(e); });
   q('.dow [data-day]').forEach(b=> b.onclick = ()=>{ cur = b.dataset.day; mode='day'; lsSet('mode',mode); lastScrollKey=''; render(); });
-  q('.mday').forEach(b=> b.onclick = ()=>{ cur = b.dataset.day; mode='day'; lsSet('mode',mode); lastScrollKey=''; render(); });
+  q('.mday').forEach(b=> b.onclick = ()=>{ if(Date.now()<suppressClickUntil) return; cur = b.dataset.day; mode='day'; lsSet('mode',mode); lastScrollKey=''; render(); });
   wireSwipe(document.getElementById('view'));
-  // open on a sensible hour (an hour or two before now when looking at today, otherwise 7am) - only when the view changes, never on a data refresh
-  const key = mode + (mode==='month' ? '' : (mode==='week' ? mondayOf(cur)===mondayOf(isoOf(new Date())) : cur===isoOf(new Date())));
+  // a new view (first open, Day/Week switch, Today) starts at 06:00 with 06:00-20:00 filling the screen; swiping weeks and data refreshes keep your place
+  const key = mode;
   if(mode!=='month' && lastScrollKey!==key){
     lastScrollKey = key;
-    const n = new Date(), looksAtToday = (mode==='week' ? mondayOf(cur)===mondayOf(isoOf(n)) : cur===isoOf(n));
-    scrollToHour(looksAtToday ? Math.max(0, Math.min(n.getHours()-2, 16)) : 7);
+    if(!userZoomed){ HOUR = Math.max(30, (window.innerHeight - headerH())/14.05); document.documentElement.style.setProperty('--hour', HOUR+'px'); }
+    scrollToHour(5.95);
   } else { window.scrollTo(0, keepY); }
+  wireDrag(document.getElementById('view'));
 }
 let savedScroll = 0;
 window.addEventListener('scroll', ()=>{ savedScroll = window.scrollY; }, {passive:true});
+let pinchRaf = 0, pinchNext = null;
 function setHour(h, cy){
-  h = Math.max(30, Math.min(150, h)); if(Math.abs(h-HOUR) < 0.6) return;
-  const b = document.getElementById('body'); if(!b) return;
-  const hourAt = (cy - b.getBoundingClientRect().top) / HOUR;
-  HOUR = h; document.documentElement.style.setProperty('--hour', HOUR+'px'); render();
-  const nb = document.getElementById('body'); if(nb) window.scrollBy(0, (nb.getBoundingClientRect().top + hourAt*HOUR) - cy);
+  h = Math.max(24, Math.min(150, h)); pinchNext = {h, cy};
+  if(pinchRaf) return;
+  pinchRaf = requestAnimationFrame(()=>{
+    pinchRaf = 0; const p = pinchNext; if(!p) return;
+    const b = document.getElementById('body'); if(!b) return;
+    const docTop = b.getBoundingClientRect().top + window.scrollY, hourAt = (p.cy - (b.getBoundingClientRect().top)) / HOUR;
+    HOUR = p.h; document.documentElement.style.setProperty('--hour', HOUR+'px');
+    window.scrollTo(0, docTop + hourAt*HOUR - p.cy);
+  });
 }
 let pinch = null;
 const tdist = t=> Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY);
 document.addEventListener('touchstart', e=>{
-  if(e.touches.length===2 && screen==='cal' && mode!=='month' && e.target.closest && e.target.closest('#view')) pinch = {d: tdist(e.touches), h: HOUR};
+  if(drag || lp) return;
+  if(e.touches.length===2 && screen==='cal' && mode!=='month' && e.target.closest && e.target.closest('#view')){ pinch = {d: tdist(e.touches), h: HOUR}; clearLp(); }
   else if(e.touches.length>2) pinch = null;
 }, {passive:true});
 document.addEventListener('touchmove', e=>{
   if(!pinch || e.touches.length!==2) return;
   setHour(pinch.h * tdist(e.touches)/pinch.d, (e.touches[0].clientY+e.touches[1].clientY)/2);
 }, {passive:true});
-document.addEventListener('touchend', e=>{ if(pinch && e.touches.length<2){ pinch = null; lsSet('hour', String(Math.round(HOUR))); } }, {passive:true});
+document.addEventListener('touchend', e=>{ if(pinch && e.touches.length<2){ pinch = null; userZoomed = true; lsSet('hour2', String(Math.round(HOUR))); cancelAnimationFrame(pinchRaf); pinchRaf = 0; if(pinchNext){ HOUR = pinchNext.h; document.documentElement.style.setProperty('--hour', HOUR+'px'); pinchNext = null; } render(); } }, {passive:true});
+
+/* ---------- hold an event, then drag it to a new time / day ---------- */
+let drag = null, lp = null, suppressClickUntil = 0;
+function clearLp(){ if(lp){ clearTimeout(lp.timer); lp = null; } }
+function wireDrag(view){
+  if(!view) return;
+  view.addEventListener('touchstart', e=>{
+    if(e.touches.length!==1 || pinch) { clearLp(); return; }
+    const el = e.target.closest && e.target.closest('.blk, .mday .chip'); if(!el){ clearLp(); return; }
+    const t = e.touches[0]; clearLp();
+    lp = {el, x:t.clientX, y:t.clientY, timer:setTimeout(()=>beginDrag(), 450)};
+  }, {passive:true});
+  view.addEventListener('contextmenu', e=>{ if(e.target.closest && e.target.closest('.blk, .chip')) e.preventDefault(); });
+}
+function beginDrag(){
+  if(!lp) return; const el = lp.el, ev = events.find(x=>x.id===el.dataset.ev); if(!ev){ lp = null; return; }
+  const r = el.getBoundingClientRect(), isGrid = el.classList.contains('blk');
+  drag = {el, ev, isGrid, grab: lp.y - r.top, grabX: lp.x - r.left, x: lp.x, y: lp.y, newDate: ev.date, newStart: ev.startTime, raf: 0, pending:false};
+  if(isGrid){ drag.dur = +el.dataset.dur; drag.startMin = +el.dataset.start; }
+  lp = null; el.classList.add('dragging'); if(navigator.vibrate) try{ navigator.vibrate(35); }catch(_){}
+  const tip = document.createElement('div'); tip.id = 'dragtip'; document.body.appendChild(tip);
+  updateDrag(); drag.raf = requestAnimationFrame(autoScroll);
+}
+function updateDrag(){
+  const d = drag; if(!d) return;
+  if(d.isGrid){
+    const cols = [...document.querySelectorAll('#view .col')]; if(!cols.length) return;
+    let col = cols.find(c=>{ const r = c.getBoundingClientRect(); return d.x>=r.left && d.x<r.right; });
+    if(!col) col = d.x < cols[0].getBoundingClientRect().left ? cols[0] : cols[cols.length-1];
+    const top = d.y - d.grab - col.getBoundingClientRect().top;
+    let min = Math.round(top/HOUR*60/15)*15; min = Math.max(0, Math.min(min, 24*60 - Math.min(d.dur, 24*60-15)));
+    if(d.el.parentNode!==col) col.appendChild(d.el);
+    d.el.style.top = `calc(var(--hour)*${(min/60).toFixed(4)})`; d.el.style.left = '0'; d.el.style.width = '100%';
+    d.newDate = col.dataset.col; d.newMin = min; d.newStart = pad(Math.floor(min/60))+':'+pad(min%60);
+    const endMin = min + d.dur;
+    document.getElementById('dragtip').textContent = longDate(d.newDate)+' · '+d.newStart+(d.ev.endTime ? ' – '+pad(Math.floor(Math.min(endMin,1439)/60))+':'+pad(Math.min(endMin,1439)%60) : '');
+  } else {
+    d.el.style.left = (d.x - d.grabX)+'px'; d.el.style.top = (d.y - 10)+'px'; d.el.style.width = '90px';
+    d.el.style.pointerEvents = 'none';
+    const cell = document.elementFromPoint(d.x, d.y), day = cell && cell.closest ? cell.closest('.mday') : null;
+    document.querySelectorAll('.mday.droptarget').forEach(c=>c.classList.remove('droptarget'));
+    if(day){ day.classList.add('droptarget'); d.newDate = day.dataset.day; }
+    document.getElementById('dragtip').textContent = longDate(d.newDate);
+  }
+}
+function autoScroll(){
+  const d = drag; if(!d) return;
+  const top = headerH() + 30, bottom = window.innerHeight - 90;
+  if(d.y > bottom) { window.scrollBy(0, Math.min(18, (d.y-bottom)/3+4)); updateDrag(); }
+  else if(d.y < top && window.scrollY>0) { window.scrollBy(0, -Math.min(18, (top-d.y)/3+4)); updateDrag(); }
+  d.raf = requestAnimationFrame(autoScroll);
+}
+document.addEventListener('touchmove', e=>{
+  const t = e.touches[0];
+  if(lp && !drag){ if(Math.hypot(t.clientX-lp.x, t.clientY-lp.y) > 10) clearLp(); return; }
+  if(drag){ if(e.cancelable) e.preventDefault(); drag.x = t.clientX; drag.y = t.clientY; updateDrag(); }
+}, {passive:false});
+async function endDrag(cancel){
+  clearLp();
+  const d = drag; if(!d) return; drag = null; cancelAnimationFrame(d.raf);
+  const tip = document.getElementById('dragtip'); if(tip) tip.remove();
+  suppressClickUntil = Date.now() + 500;
+  const ev = d.ev, moved = d.newDate!==ev.date || (d.isGrid && d.newStart!==ev.startTime);
+  if(cancel || !moved){ render(); return; }
+  const delta = Math.round((parseIso(d.newDate) - parseIso(ev.date))/86400000);
+  const entry = {...ev, date: d.newDate};
+  if(ev.endDate) entry.endDate = addDays(ev.endDate, delta);
+  if(d.isGrid){ entry.startTime = d.newStart; if(ev.endTime){ const e2 = Math.min(d.newMin + d.dur, 24*60-1); entry.endTime = pad(Math.floor(e2/60))+':'+pad(e2%60); } }
+  events = events.map(x=> x.id===ev.id ? entry : x); render();
+  try { await writeEvent('save', entry); toast('Moved to '+longDate(entry.date)+(entry.startTime?', '+entry.startTime:'')); }
+  catch(err){ events = events.map(x=> x.id===ev.id ? ev : x); render(); toast(saveError(err)); }
+}
+document.addEventListener('touchend', e=>{ if(drag){ if(e.cancelable) e.preventDefault(); endDrag(false); } else clearLp(); }, {passive:false});
+document.addEventListener('touchcancel', ()=>{ if(drag) endDrag(true); else clearLp(); });
 function wireSwipe(el){
   if(!el) return;
   let x0=null, y0=null;
   el.addEventListener('touchstart', e=>{ if(e.touches.length>1){ x0=null; return; } x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, {passive:true});
   el.addEventListener('touchend', e=>{
-    if(x0===null || pinch) return;
+    if(x0===null || pinch || drag) return;
     const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
     if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.5) go(dx<0 ? 1 : -1);
   }, {passive:true});
 }
-setInterval(()=>{ const l = document.getElementById('nowline'); if(l){ const n = new Date(); l.style.top = ((n.getHours()*60+n.getMinutes())/60*HOUR)+'px'; } }, 60000);
+setInterval(()=>{ const l = document.getElementById('nowline'); if(l){ const n = new Date(); l.style.top = 'calc(var(--hour)*'+((n.getHours()*60+n.getMinutes())/60).toFixed(4)+')'; } }, 60000);
 
 function render(){
+  if(drag) return;
   const app = document.getElementById('app');
   if(!authChecked){ app.innerHTML = ''; return; }
   const keepY = window.scrollY;
