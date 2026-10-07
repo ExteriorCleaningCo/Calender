@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>My Calendar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E6E76">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Calendar">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAD10lEQVR4nO3dIZIcVRzA4V6KQoYqrsABEFjwCFQEgkMEF86A5BIIBAqBBxvBAbgCVVhMEKmFrUDI9Mwk83+//j6VSt709uv+7dup7X2bu0dPnj7fIOKdW58AXJOgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0Ke/e+gRu6b3vv/v7z39+8eUNz+Q6avM5x90Rf1njwxv/shVDqM3nEod7y/F/N/+Uf5+mNp9LHS5o2g4V9Kmr1SqrWm0+13CooOkTNCmHCXrvl93pX6Zr87mWwwTNMQiaFEGTImhSBE2KoEk5TNB7f0hn+g/11OZzLYcJmmMY8/PQPz776Y1/jMc7xr6N87nUtPl8/vFnb/xjvM6hVugfPvzgquNurTafazhU0PQdLujXrVarrWa1+VxqzHvot+n+Jj/+7fd//d2KavO5xCGDvle76bX5nONwbzloEzQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJGfObkz795ddbnwKX+urrW5+BFZoWQZMiaFIETYqgSRE0KYImRdCkCJoUQZMy5tH3pd7f8dj1j2+/cfwrH3+KxAq952YZf/3xkywf9LkX/9TXOf5alg8aHhI0KYImRdCkCJoUQZMiaFIETcryQZ/7mPbU1zn+WpYPetv2X3zjrzt+krtHT54+v/VJbNvaF5EXJjwuT6zQcE/QpAiaFEGTImhSBE2KPYVDjv/zJx+dPPacXz1sT+FCpu2x2zt+T8znjLencCGr78nbG+fe19lTCAsTNCmCJkXQpAiaFEGTImhSBE3K8kGvvifv3P9B99TX2VO4oGl77PaO3xv13vH2FN7AyheRFyY8Lk+s0HBP0KQImhRBkyJoUgRNij2Fjn+V40+RWKGn7RE82vhJlg969T2Fqx9/muWDhocETYqgSRE0KYImRdCkCJoUQZOyfNCr7ylc/fjTjAn6kidT0/YIHm38ts15sjhmT+G2rbsqMCfoMSs0XMOooKd8lrPPpPs2Kuhtm3VxeL1p92tc0HCJkUFP+6znv028TyOD3raZF4t/TL0/o75t9yq+nTfH1JDvjV2hH5p+EY9ihfuwxAr9Miv227NCxA8tGTS8yhJvOeBUgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUv4CB6odplYUvhsAAAAASUVORK5CYII=">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAD10lEQVR4nO3dIZIcVRzA4V6KQoYqrsABEFjwCFQEgkMEF86A5BIIBAqBBxvBAbgCVVhMEKmFrUDI9Mwk83+//j6VSt709uv+7dup7X2bu0dPnj7fIOKdW58AXJOgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0Ke/e+gRu6b3vv/v7z39+8eUNz+Q6avM5x90Rf1njwxv/shVDqM3nEod7y/F/N/+Uf5+mNp9LHS5o2g4V9Kmr1SqrWm0+13CooOkTNCmHCXrvl93pX6Zr87mWwwTNMQiaFEGTImhSBE2KoEk5TNB7f0hn+g/11OZzLYcJmmMY8/PQPz776Y1/jMc7xr6N87nUtPl8/vFnb/xjvM6hVugfPvzgquNurTafazhU0PQdLujXrVarrWa1+VxqzHvot+n+Jj/+7fd//d2KavO5xCGDvle76bX5nONwbzloEzQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJGfObkz795ddbnwKX+urrW5+BFZoWQZMiaFIETYqgSRE0KYImRdCkCJoUQZMy5tH3pd7f8dj1j2+/cfwrH3+KxAq952YZf/3xkywf9LkX/9TXOf5alg8aHhI0KYImRdCkCJoUQZMiaFIETcryQZ/7mPbU1zn+WpYPetv2X3zjrzt+krtHT54+v/VJbNvaF5EXJjwuT6zQcE/QpAiaFEGTImhSBE2KPYVDjv/zJx+dPPacXz1sT+FCpu2x2zt+T8znjLencCGr78nbG+fe19lTCAsTNCmCJkXQpAiaFEGTImhSBE3K8kGvvifv3P9B99TX2VO4oGl77PaO3xv13vH2FN7AyheRFyY8Lk+s0HBP0KQImhRBkyJoUgRNij2Fjn+V40+RWKGn7RE82vhJlg969T2Fqx9/muWDhocETYqgSRE0KYImRdCkCJoUQZOyfNCr7ylc/fjTjAn6kidT0/YIHm38ts15sjhmT+G2rbsqMCfoMSs0XMOooKd8lrPPpPs2Kuhtm3VxeL1p92tc0HCJkUFP+6znv028TyOD3raZF4t/TL0/o75t9yq+nTfH1JDvjV2hH5p+EY9ihfuwxAr9Miv227NCxA8tGTS8yhJvOeBUgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUv4CB6odplYUvhsAAAAASUVORK5CYII=">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIk15IENhbGVuZGFyIiwgInNob3J0X25hbWUiOiAiQ2FsZW5kYXIiLCAic3RhcnRfdXJsIjogIi4iLCAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwgImJhY2tncm91bmRfY29sb3IiOiAiI0Y2RjdGNiIsICJ0aGVtZV9jb2xvciI6ICIjMEU2RTc2IiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBTUFBQUFEQUNBWUFBQUJTM0d3SEFBQUVjMGxFUVZSNG5PM2RQNDdrUkJqRzRScUVDQmVKSzNBQUFsTElDWWdJQ0RqRWtBMW5JT1FTQkFSRUJPU1Fic0FCdUFJU0tja1F0WmdWODYvczd2WlgzL3M4MmE2bTFDN2JQN3RIN1pxK2VYTjdkejhnMUh0SGJ3QWNTUUJFRXdEUkJFQTBBUkJOQUVRVEFORUVRRFFCRUUwQVJCTUEwUVJBTkFFUVRRQkVFd0RSQkVBMEFSQk5BRVFUQU5FRVFEUUJFRTBBUkJNQTBRUkFOQUVRVFFCRUV3RFJCRUMwOTQvZWdDbysrT25IZC83OXo5ZmZITFFsbDlGOWZsdTVBNHovbnh4UC9kK3F1czl2ai9nQW5qc1JPcHdrM2VlM1YzUUFyemtCVmo1SnVzL3ZIS0lEZ05nQVpxNThLMTRsdTgvdlhHSURnREZDQTloeXhWdnBLdGw5ZnVjVUdRQ2NDSUJvQWlDYUFJZ21BS0lKZ0dnQ0lKb0FpQllad0pabjRWZDZmcjc3L000cE1nQTR1WGx6ZTNkLzlFWnM5Y3ZiWDNlTi8rclB2MTcxY3o5Ly9OR3Uxem5LdGViMzVhZGY3QnAvcENXWFJPNDk4VG12aDhkanRSaVd1Z05jNHNSLzZTcTU2dFgvNUtqNXJSTENNcjhEWE9xcS85d0pzUHJKUDhaeDgxdmxMcjFFQUpmZW1ZK2RDQjFPL3BPajVyZENCT1hmQXEyd0UzbGU1YmREcGU4QVR2NGVLaC9Ic2dGVTNtbk1xM284eXdZQTExQXlnS3BYQy9hcGVGeExCZ0RYVWk2QWlsY0p6cWZhOFMwWEFGeVRBSWdtQUtJSmdHZ0NJSm9BaUNZQW9nbUFhQUlnbWdDNHFzOS8vK1BvVFhpSEFJZ21BS0lKZ0dnQ0lKb0FpQ1lBb2dtQWFBSWdtZ0NJSmdDaWxmdno2RE1mbGYvMjJTY1gzQkplcTlyakRUUEtCVEJqNVIxUERkNENFVTBBUkJNQTBRUkFOQUVRVFFCRUV3RFJCRUEwQVJCTkFFUVRBTkdXZmhib0tSOSsrOTNVei8vOXcvZGxYNmZUWENwcWR3ZVlQWkNWeDFUZHJxMWpLbW9Wd0o2RE1qUDJHcS9UYVM2VnRRb0FaZ21BYUFJZ21nQ0lKZ0NpQ1lCb0FpQ2FBSWdtQUtLMUNtRFA4eWt6WTYveE9wM21VbG1yQU1iWWRsQ3FqcW02WFZ2SFZIVHo1dmJ1L3VpTmVLakxqdVZwbFo0aGFuY0hnQmtDSUpvQWlDWUFvZ21BYUFJZ21rWHhvL1pDOHRsdndkbjZwU0VXeFRkUmVWSDQ3Smd0WHdHMVpZeEY4VTEwV2tpKzUvdlBac1phRkEvQkJFQTBBUkJOQUVRVEFORUVRRFFCRUUwQVJCTUEwVm9GMEdraCtkWm5lbWJIV2hUZlRPVkY0Yk5qdGtTd1pZeEY4WVYwMmJFOHJkSXpSTzN1QURCREFFUVRBTkVFUURRQkVFMEFSTE1vZnRSZUZOOXBMaFcxdXdOVVhlQytaVXpWN2RvNnBxSldBWFJhRk45cExwVzFDZ0JtQ1lCb0FpQ2FBSWdtQUtJSmdHZ0NJSm9BaUNZQW9yVUtvTk9pK0U1enFheGNBSHMvWHErNndIM0xtS3JidFhYTUdQVWVueWkzS0g2TUhsY1dIbGN0Z0hKM0FMaW1rZ0ZVdTBwd0hoV1BhOGtBNEZyS0JsRHhhc0YyVlk5bjJRREdxTHZUbUZQNU9KWU9ZSXphTzQrWFZUOSs1UU1Zby81TzVIRXJITGNsQWhoampaM0pmMVk1WGlVL0NIdUpEOHJxV3VYRVAxa3lnQk1oMUxEYVNmL1EwZ0hBWHN2OERnQ1hJQUNpQ1lCb0FpQ2FBSWdtQUtJSmdHZ0NJSm9BaUNZQW9nbUFhQUlnbWdDSUpnQ2lDWUJvQWlDYUFJZ21BS0lKZ0dnQ0lKb0FpQ1lBb2dtQWFBSWdtZ0NJSmdDaUNZQm9BaUNhQUlnbUFLSUpnR2dDSU5xLzhxVlJOd2pFZjdVQUFBQUFTVVZPUks1Q1lJST0iLCAic2l6ZXMiOiAiMTkyeDE5MiIsICJ0eXBlIjogImltYWdlL3BuZyJ9LCB7InNyYyI6ICJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQWdBQUFBSUFDQVlBQUFEMGVOVDZBQUFPbmtsRVFWUjRuTzNjTVhJMDFSV0c0WlpMNVZCL2xiZmdCUkNRUWs1QTVJQ0FSVWladEFhRjJvUURCNDRJeUNFbFlBSGVncXVVa3NqQlh3TDFpSkZteHFON3p1M3ZlVUtxcUQ1MTFIMzduWkhnNHVyNjlta0JBS0w4cFhvQUFHQThBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCTHFzSGdIUDU2Ny8rK2FmLy9MZnZ2aDg4Q1Z2Z2ZtTHJMcTZ1YjUrcWg0QlQ3VHVrOTNGNDh4YjNFMG44Q29CcEhYdFluL3J2a01IOVJCb0J3SlQrbjRQWG9jMHU5eE9KQkFEVE9jZUI2OURtbWZ1SlZBS0FxWnp6b0hWbzQzNGltUUJnR2g5eHdEcTBjN21mU0NjQW1NSkhIcXdPN1R6dUp4QUFUR0RFZ2VyUXp1RitnczhFQUFBRUVnQzBOdktUbEU5dDIrZCtnajhJQUFBSUpBQm9xK0lUbEU5dDIrVitnalVCQUFDQkJBQXRWWDV5OHFsdGU5eFA4Sm9BQUlCQUFnQUFBZ2tBMnVud2xXbUhHVGlQRGovTERqUEFMZ0VBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBVUFybmY1WXF0TXNuS2JUejdEVExMQXNBZ0FBSWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBV3ZudHUrK3JSL2hkcDFrNFRhZWZZYWRaWUZrRUFBQkVFZ0FBRUVnQUFFQWdBUUFBZ1FRQTdYVDRZNmtPTTNBZUhYNldIV2FBWFFJQUFBSUpBQUFJSkFCb3FmSXJVMS9YYm8vN0NWNFRBQUFRNk9McSt2YXBlZ2g2K09HWEg2dEhlT1VmLy9udjBPdjkrKzkvRzNvOXhuSS9mZmJ0bDk5VWowQURsOVVEVUtQanl4NFlZL2Y1RndTWmZBTVFaTmFYL3FoUGJWMC9yWEZlN3FlM2lZRWN2Z0VJTU91TEh4anY1WGtoQnJiTk53QWJ0cVVYLzBkL2FwdjEweHFuY1Q4ZFJ3aHNrd0RZb0MyOStGLzZxRU43YTRjMWgzRS9IVThJYkl2L0RIQkRmdmpseDgyKy9KZmxZdzdXTFIvV3ZNMzlkTHd0bnkrSkJNQkdwRHlZNXp4Z3QzNVk4ejczMC9HMi9rRWppUURZZ0xTSDhSd0hiY3BoemZ2Y1Q2ZEpPM2UyeU44QVRDejlBVHoxZDdpSmh6WHZjeitkenQ4R3pNazNBSk5LZi9rdnkya0hyOE9hZmR4UHAzTWV6Y2szQUJQeXNQMjVmWi9nSE5LY3d2MTBQTjhFekVVQVRNYkxIK2hNQk16RHJ3QW00dVVQZE9lY21vY0FtSVNIQ3BpRjgyb09BZ0FBQWdtQUNhaHBZRGJPcmY0RVFITWVJbUJXenEvZUJFQmpIaDVnZHM2eHZnUUFBQVFTQUUycFptQXJuR2M5Q1FBQUNDUUFHbExMd05ZNDEvb1JBQUFRU0FBMG81S0JyWEsrOVNJQUFDQ1FBR2hFSFFOYjU1enJRd0FBUUNBQkFBQ0JCRUFUdmhZRFVqanZlaEFBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FOK0lNWUlJMXpyNTRBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpnR0wrZDVnQVZCQUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRXVxd2VJTjIzWDM2elBEN2NWNDhCTU43TlhmVUUwWHdEQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdTNnJCMkJlbjI3dWhsM3I4ZUYrMkxWT05YSWZ5OUovSi9heFpoOTBjM0YxZmZ0VVBVUzYyUjdVMFFmWnJtNzdxdDdIc3ZUYWlYMnMyY2QrSFhhVHpLOEFPRXFIQjdiRERNKzZ6R0tPTlhPc2RabURYZ1FBQit0MGlIU1lwY01NTDFYUFUzMzlYZFh6VkY5L1Y3ZDVxQ2NBT0VqSHc2Tnlwbzc3V0phNnVleWp4M1hmMDNVdWFnZ0FBQWdrQUhoWDUwOE5GYk4xM3NleWpKL1BQbXF2ZDZ6dTh6R09BQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNnSGM5UHR4WGo3Qlh4V3lkOTdFczQrZXpqOXJySGF2N2ZJd2pBQUFna0FCZ1dqN0p2R1luYS9heFpoKzhKQUE0aUlOanpUN1c3R1BOUHBpQkFPQmduUTYxRHJOMG1PR2w2bm1xcjcrcmVwN3E2Ky9xTmcvMUxxNnViNStxaDBnMzI0UDU2ZWF1N05vZGQxVzVqMlhwdHhQN1dMT1AvYXAzazA0QU5ORDVBWDNMeUlkM2hoMk5Qc3k2NzhRKzF1empOUUZRU3dBME1NT0RDbkJ1QXFDV3Z3RUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQWw5VURNSzlQTjNmRHJ2WDRjRC9zV3FjYXVZOWw2YitUbjc3Nll1ajF2djc1MTZIWE81YjdnMjR1cnE1dm42cUhTRGZiZ3pyNklOdlZiVi9WKzFpV1hqc1ovZUwvTTUxaXdQMnhYNGZkSlBNckFJN1M0WUh0TU1PekxyTjBtYVBEeTM5WitzelI1ZWZTWlE1NkVRQWNyTk1oMG1HV0RqTzhWRDFQbDVmdXMrcDVxbjhldTdyTlF6MEJ3RUU2SGg2Vk0zWGN4N0xVelZYOXN0Mm5haTczQnpNUUFBQVFTQUR3cnM2ZkdpcG02N3lQWlJrL1g5ZFAvODlHeitmK1lCWUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0Ezdlg0Y0Y4OXdsNFZzM1hleDdLTW4rL3JuMzhkZXIxampaN1AvY0VzQkFBQUJCSUFUTXNubWRmc1pLMzd0eE9qdVQ5NFNRQndFQWZIbW4yc2VkR3V1VCtZZ1FEZ1lKME90UTZ6ZEpqaHBlcDV1a1ZBOVR6VlA0OWQzZWFoM3NYVjllMVQ5UkRwWm5zd1A5M2NsVjI3NDY0cTk3RXMvWGJ5MDFkZmxGNi8rc1cveS8yeFgvVnUwZ21BQmpvL29HOForZkRPc0tQUmgxbjNuWXdPZ1c0di9sM3VqOWNFUUMwQjBNQU1EeXJBdVFtQVd2NEdBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBbDlVRE1LOVBOM2ZEcnZYNGNEL3NXcWNhdVk5bDZiOFQrMWl6RDdxNXVMcStmYW9lSXQxc0Qrcm9nMnhYdDMxVjcyTlpldTNFUHRic1k3OE91MG5tVndBY3BjTUQyMkdHWjExbU1jZWFPZGE2ekVFdkFvQ0RkVHBFT3N6U1lZYVhxdWVwdnY2dTZubXFyNytyMnp6VUV3QWNwT1BoVVRsVHgzMHNTOTFjOXRIanV1L3BPaGMxQkFBQUJCSUF2S3Z6cDRhSzJUcnZZMW5HejJjZnRkYzdWdmY1R0VjQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBTzk2ZkxpdkhtR3ZpdGs2NzJOWnhzOW5IN1hYTzFiMytSaEhBRFR3NmVhdWVnU0FvWng3OVFRQTAvSko1alU3V2JPUE5mdmdKUUhBUVJ3Y2EvYXhaaDlyOXNFTUJBQUg2M1NvZFppbHd3d3ZWYzlUZmYxZDFmTlVYMzlYdDNtb2QzRjFmZnRVUFFTZnpmS0FWdjd1cnVPT3FuK1gyVzBuOXJGbUg2OVY3NFRQQkVBakhSL1V0NHg4aUdmWXplaERyZnRPN0dQTlB2NGdBSG9RQUkxMGZtQUJ6a1VBOU9CdkFCcnhVQUJiNTV6clF3QUFRQ0FCQUFDQkJFQXp2aDREdHNyNTFvc0FBSUJBQXFBaGxReHNqWE90SHdFQUFJRUVRRk5xR2RnSzUxbFBBcUF4RHcwd08rZFlYd0lBQUFJSmdPYlVNekFyNTFkdkFtQUNIaUpnTnM2dC9nUUFBR2ZsNVQ4SEFUQUpEeFFBNXlRQUppSUNnTzZjVS9NUUFKUHhjQUZkT1ovbUlnQW01Q0VEdW5FdXplZmk2dnIycVhvSVR2UDRjRjg5QWhET2kzOWVBbUFEaEFCUXdjdC9ibjRGc0FFZVFtQTA1ODc4ZkFPd0liNEpBRDZhRi85MkNJQU5FZ0xBUi9EeTN4WUJzR0ZDQURnSEwvNXRFZ0FCaEFCd0NpLytiUk1BUVlRQThCNHYvUndDSUpRWUFKNTU2V2NTQVB4T0ZFQUdMM3lXUlFBQVFDVC9JeUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUk5RCtleGhaanhqR3F1QUFBQUFCSlJVNUVya0pnZ2c9PSIsICJzaXplcyI6ICI1MTJ4NTEyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55In1dfQ==">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --ink:#14181C; --ink-soft:#5B6672; --bg:#F6F7F6; --card:#FFFFFF; --line:#E2E5E4; --teal:#0E6E76; --teal-soft:#E3EFEF; --rust:#C23B2E; --rust-soft:#FBEAE7; }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Poppins',system-ui,sans-serif;-webkit-text-size-adjust:100%;}
+  body{min-height:100vh;min-height:100dvh;overflow-x:hidden;padding-bottom:calc(96px + env(safe-area-inset-bottom));}
+  button{font-family:inherit;cursor:pointer;}
+  .top{position:sticky;top:0;z-index:5;background:var(--teal);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;}
+  .top-row{display:flex;align-items:center;gap:8px;}
+  .top h1{flex:1;margin:0;font-size:19px;font-weight:700;text-align:center;}
+  .ic{width:42px;height:42px;border-radius:12px;border:none;background:rgba(255,255,255,0.16);color:#fff;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;}
+  .ic:active{background:rgba(255,255,255,0.3);}
+  .top-row2{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;}
+  .seg{display:flex;background:rgba(255,255,255,0.16);border-radius:10px;padding:3px;}
+  .seg button{border:none;background:none;color:#fff;font-size:13px;font-weight:600;padding:7px 14px;border-radius:8px;}
+  .seg button.on{background:#fff;color:var(--teal);}
+  .today-btn{border:none;background:rgba(255,255,255,0.16);color:#fff;font-size:13px;font-weight:600;padding:9px 14px;border-radius:10px;}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);padding:10px 8px 4px;font-size:11px;font-weight:600;color:var(--ink-soft);text-align:center;}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:0 8px;}
+  .day{position:relative;min-height:54px;border:none;background:var(--card);border-radius:10px;padding:5px 2px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink);font-size:14px;font-weight:500;}
+  .day.out{background:transparent;color:#9AA3AA;}
+  .day.sel{outline:2px solid var(--teal);}
+  .day .num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .day.today .num{background:var(--teal);color:#fff;font-weight:700;}
+  .dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;max-width:100%;padding:0 3px;}
+  .dot{width:7px;height:7px;border-radius:50%;}
+  .more{font-size:9px;color:var(--ink-soft);line-height:7px;font-weight:600;}
+  .dayhead{padding:18px 16px 8px;font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:baseline;}
+  .dayhead span{font-size:12px;font-weight:500;color:var(--ink-soft);}
+  .list{padding:0 8px;display:flex;flex-direction:column;gap:8px;}
+  .ev{display:flex;gap:12px;align-items:stretch;background:var(--card);border-radius:12px;padding:12px;text-align:left;width:100%;color:var(--ink);cursor:pointer;}
+  .bar{width:5px;border-radius:3px;flex:none;}
+  .ev .tm{width:52px;flex:none;font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.35;}
+  .ev .body{flex:1;min-width:0;}
+  .ev .ttl{font-size:15px;font-weight:600;overflow-wrap:anywhere;}
+  .ev .meta{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .ev .loc{margin-top:4px;font-size:13px;}
+  .ev .loc a{color:var(--teal);font-weight:600;text-decoration:none;overflow-wrap:anywhere;}
+  .ev .note{font-size:12px;color:var(--ink);margin-top:4px;white-space:pre-wrap;overflow-wrap:anywhere;}
+  .empty{padding:22px 16px;color:var(--ink-soft);font-size:14px;text-align:center;}
+  .fab{position:fixed;right:18px;bottom:calc(20px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;border:none;background:var(--rust);color:#fff;font-size:32px;box-shadow:0 6px 18px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;z-index:6;}
+  /* editor + sign-in are normal pages, not pop-ups, so nothing ever needs its own scroll bar */
+  .page{padding:calc(14px + env(safe-area-inset-top)) 16px 30px;max-width:560px;margin:0 auto;}
+  .page h2{margin:6px 0 14px;font-size:20px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:5px;}
+  input,select,textarea{width:100%;min-width:0;max-width:100%;-webkit-appearance:none;appearance:none;font-family:inherit;font-size:16px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);}
+  textarea{resize:none;overflow:hidden;}
+  select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' fill='none' stroke='%235B6672' stroke-width='2'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+  .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;}
+  input[type=date],input[type=time]{min-height:48px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font-size:14px;font-weight:500;color:var(--ink);}
+  .chip.sel{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .btn{width:100%;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:600;background:var(--teal);color:#fff;}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);}
+  .btn.danger{background:var(--rust-soft);color:var(--rust);}
+  .btn:disabled{opacity:0.6;}
+  .row{display:flex;gap:10px;margin-top:10px;}
+  .err{color:var(--rust);font-size:13px;min-height:18px;margin:6px 0;}
+  .sug{display:none;position:absolute;left:0;right:0;top:100%;z-index:30;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.18);overflow:hidden;}
+  .sug button{display:block;width:100%;text-align:left;background:#fff;border:none;border-bottom:1px solid var(--line);padding:13px 12px;font-size:15px;color:var(--ink);}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom));background:#14181C;color:#fff;padding:11px 18px;border-radius:12px;font-size:14px;z-index:20;max-width:90%;text-align:center;}
+  .sync{font-size:11px;color:rgba(255,255,255,0.8);text-align:center;margin-top:2px;}
+  .login{padding-top:calc(60px + env(safe-area-inset-top));}
+  .login .logo{width:84px;height:84px;border-radius:20px;display:block;margin:0 auto 14px;}
+  .login h2{text-align:center;}
+  .login p{text-align:center;color:var(--ink-soft);font-size:14px;margin:0 0 18px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
+<script>
+const BUILD_VERSION = '2026-10-07-phone-calendar-2';
+firebase.initializeApp({
+  apiKey: "AIzaSyDVpT49n-X6bkFIQCZJT9PQmBeeTRkHcDk",
+  authDomain: "exterior-cleaning-co.firebaseapp.com",
+  projectId: "exterior-cleaning-co",
+  storageBucket: "exterior-cleaning-co.firebasestorage.app",
+  messagingSenderId: "312186645828",
+  appId: "1:312186645828:web:975d91544250b5f0017b11"
+});
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+/* ---------- the same calendar the tracker uses: eccData/officeCalendar = {value:[events]} ---------- */
+const CAL_DEFAULTS = [
+  {key:'estimate', label:'Estimate', color:'#0E6E76'}, {key:'work', label:'Work', color:'#3E8F5C'},
+  {key:'holiday', label:'Holiday', color:'#B5791C'}, {key:'meeting', label:'Meeting', color:'#C23B2E'},
+  {key:'other', label:'Other', color:'#5B6672'}];
+const VAN_COLORS = ['#1E88E5','#43A047','#8E24AA','#D81B60','#00ACC1','#3949AB','#6D4C41','#5E35B1'];
+const SWATCH_PALETTE = ['#E53935','#1E88E5','#43A047','#FB8C00','#8E24AA','#00ACC1','#D81B60','#F9A825','#3949AB','#7CB342','#6D4C41','#F4511E','#5E35B1','#00897B','#C0CA33','#546E7A'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+let events = [], crew = [], settings = {};
+let loaded = {events:false, crew:false}, fromCache = false;
+let user = null, authChecked = false;
+let view = 'cal';                       // 'cal' | 'edit' | 'login'
+let anchor = new Date(); anchor.setDate(1);
+let selected = isoOf(new Date());
+let scope = lsGet('scope') || 'mine';   // 'mine' | 'all'
+let editing = null, editingIsNew = false, toastTimer = null;
+
+function lsGet(k){ try { return localStorage.getItem('ecccal_'+k); } catch(e){ return null; } }
+function lsSet(k,v){ try { localStorage.setItem('ecccal_'+k, v); } catch(e){} }
+function uid(){ return Math.random().toString(36).slice(2,9); }
+function pad(n){ return String(n).padStart(2,'0'); }
+function isoOf(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function parseIso(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); }
+function addDays(iso, n){ const d = parseIso(iso); d.setDate(d.getDate()+n); return isoOf(d); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function ordinal(n){ const v=n%100; return n+(['th','st','nd','rd'][(v-20)%10]||['th','st','nd','rd'][v]||'th'); }
+function longDate(iso){ const d = parseIso(iso); return `${DAYS[d.getDay()]} ${ordinal(d.getDate())} ${MONTHS[d.getMonth()]}`; }
+
+function categories(){ return (settings.calendarCategories && settings.calendarCategories.length) ? settings.calendarCategories : CAL_DEFAULTS; }
+function categoryByKey(k){ return categories().find(c=>c.key===k) || {key:k, label:k||'Other', color:'#5B6672'}; }
+function officeCrew(){ return crew.filter(c=> !c.archived && c.department==='office'); }
+function staffColor(id){
+  const c = crew.find(x=>x.id===id); if(!c) return '#9AA3AA';
+  if(c.color) return c.color;
+  const idx = crew.filter(x=>!x.archived).findIndex(x=>x.id===id);
+  return idx>-1 ? VAN_COLORS[idx % VAN_COLORS.length] : '#9AA3AA';
+}
+function personalColor(c){
+  if(c.personalColor) return c.personalColor;
+  const i = SWATCH_PALETTE.indexOf(staffColor(c.id));
+  return i>-1 ? SWATCH_PALETTE[(i+8) % SWATCH_PALETTE.length] : '#8E24AA';
+}
+function staffName(c){ return [c.forename, c.surname].filter(Boolean).join(' ') || c.name || ''; }
+function eventColor(e){
+  const s = e.staffId ? crew.find(c=>c.id===e.staffId) : null;
+  if(s) return e.personal ? personalColor(s) : staffColor(s.id);
+  return categoryByKey(e.type).color;
+}
+// Who "I" am: the office person whose email matches the sign-in, otherwise the Main Admin.
+function me(){
+  const people = officeCrew();
+  const email = user && user.email ? user.email.toLowerCase() : '';
+  return people.find(c=> c.email && c.email.toLowerCase()===email) || people.find(c=>c.isMainAdmin) || people[0] || null;
+}
+function eventCoversDay(e, iso){ return e.date <= iso && (e.endDate || e.date) >= iso; }
+function visibleEvents(){
+  const m = me();
+  return events.filter(e=> scope==='all' || !m || !e.staffId || e.staffId===m.id);
+}
+function eventsOn(iso){
+  return visibleEvents().filter(e=>eventCoversDay(e, iso)).sort((a,b)=>{
+    const at = a.startTime||'', bt = b.startTime||'';
+    if(!at !== !bt) return at ? 1 : -1;     // all-day first
+    return at.localeCompare(bt) || (a.title||'').localeCompare(b.title||'');
+  });
+}
+
+/* ---------- saving: change just this event, against the live server copy, never a stale whole list ---------- */
+async function writeEvent(op, entry, id){
+  const ref = db.collection('eccData').doc('officeCalendar');
+  await db.runTransaction(async tx=>{
+    const snap = await tx.get(ref);
+    let list = (snap.exists && Array.isArray(snap.data().value)) ? snap.data().value.slice() : [];
+    if(op==='delete') list = list.filter(e=>e.id!==id);
+    else if(list.some(e=>e.id===entry.id)) list = list.map(e=> e.id===entry.id ? entry : e);
+    else list.push(entry);
+    tx.set(ref, {value: JSON.parse(JSON.stringify(list))});
+  });
+}
+
+/* ---------- screens ---------- */
+function toast(msg){
+  const old = document.getElementById('toast'); if(old) old.remove();
+  const t = document.createElement('div'); t.id='toast'; t.className='toast'; t.textContent = msg; document.body.appendChild(t);
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.remove(), 2800);
+}
+function render(){
+  const app = document.getElementById('app');
+  if(!authChecked){ app.innerHTML = ''; return; }
+  if(!user || user.isAnonymous){ view='login'; renderLogin(app); return; }
+  if(view==='edit'){ renderEditor(app); return; }
+  view = 'cal'; renderCalendar(app);
+}
+function renderLogin(app){
+  app.innerHTML = `<div class="page login">
+    <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAD10lEQVR4nO3dIZIcVRzA4V6KQoYqrsABEFjwCFQEgkMEF86A5BIIBAqBBxvBAbgCVVhMEKmFrUDI9Mwk83+//j6VSt709uv+7dup7X2bu0dPnj7fIOKdW58AXJOgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0Ke/e+gRu6b3vv/v7z39+8eUNz+Q6avM5x90Rf1njwxv/shVDqM3nEod7y/F/N/+Uf5+mNp9LHS5o2g4V9Kmr1SqrWm0+13CooOkTNCmHCXrvl93pX6Zr87mWwwTNMQiaFEGTImhSBE2KoEk5TNB7f0hn+g/11OZzLYcJmmMY8/PQPz776Y1/jMc7xr6N87nUtPl8/vFnb/xjvM6hVugfPvzgquNurTafazhU0PQdLujXrVarrWa1+VxqzHvot+n+Jj/+7fd//d2KavO5xCGDvle76bX5nONwbzloEzQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJGfObkz795ddbnwKX+urrW5+BFZoWQZMiaFIETYqgSRE0KYImRdCkCJoUQZMy5tH3pd7f8dj1j2+/cfwrH3+KxAq952YZf/3xkywf9LkX/9TXOf5alg8aHhI0KYImRdCkCJoUQZMiaFIETcryQZ/7mPbU1zn+WpYPetv2X3zjrzt+krtHT54+v/VJbNvaF5EXJjwuT6zQcE/QpAiaFEGTImhSBE2KPYVDjv/zJx+dPPacXz1sT+FCpu2x2zt+T8znjLencCGr78nbG+fe19lTCAsTNCmCJkXQpAiaFEGTImhSBE3K8kGvvifv3P9B99TX2VO4oGl77PaO3xv13vH2FN7AyheRFyY8Lk+s0HBP0KQImhRBkyJoUgRNij2Fjn+V40+RWKGn7RE82vhJlg969T2Fqx9/muWDhocETYqgSRE0KYImRdCkCJoUQZOyfNCr7ylc/fjTjAn6kidT0/YIHm38ts15sjhmT+G2rbsqMCfoMSs0XMOooKd8lrPPpPs2Kuhtm3VxeL1p92tc0HCJkUFP+6znv028TyOD3raZF4t/TL0/o75t9yq+nTfH1JDvjV2hH5p+EY9ihfuwxAr9Miv227NCxA8tGTS8yhJvOeBUgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUv4CB6odplYUvhsAAAAASUVORK5CYII=" alt="">
+    <h2>My Calendar</h2><p>Sign in with the same email and password you use for the tracker.</p>
+    <form id="lf">
+      <div class="field"><label>Email</label><input id="lemail" type="email" autocomplete="username" autocapitalize="off" required></div>
+      <div class="field"><label>Password</label><input id="lpass" type="password" autocomplete="current-password" required></div>
+      <div class="err" id="lerr"></div>
+      <button class="btn" id="lgo" type="submit">Sign in</button>
+    </form></div>`;
+  document.getElementById('lf').onsubmit = async e=>{
+    e.preventDefault();
+    const b = document.getElementById('lgo'), er = document.getElementById('lerr');
+    b.disabled = true; b.textContent = 'Signing in…'; er.textContent = '';
+    try { await auth.signInWithEmailAndPassword(document.getElementById('lemail').value.trim(), document.getElementById('lpass').value); }
+    catch(err){
+      b.disabled = false; b.textContent = 'Sign in';
+      er.textContent = (err.code==='auth/invalid-credential'||err.code==='auth/wrong-password'||err.code==='auth/user-not-found') ? 'Incorrect email or password.' : 'Sign-in failed — check your connection.';
+    }
+  };
+}
+function renderCalendar(app){
+  const y = anchor.getFullYear(), mo = anchor.getMonth();
+  const first = new Date(y, mo, 1), startOffset = (first.getDay()+6)%7;      // Monday first
+  const gridStart = new Date(y, mo, 1-startOffset);
+  const todayIso = isoOf(new Date());
+  let cells = '';
+  for(let i=0;i<42;i++){
+    const d = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate()+i), iso = isoOf(d);
+    if(i>=35 && d.getMonth()!==mo) break;          // skip a fully-empty 6th row
+    const evs = eventsOn(iso), shown = evs.slice(0,4), extra = evs.length-shown.length;
+    cells += `<button class="day ${d.getMonth()!==mo?'out':''} ${iso===todayIso?'today':''} ${iso===selected?'sel':''}" data-day="${iso}" aria-label="${esc(longDate(iso))}, ${evs.length} event${evs.length===1?'':'s'}">
+      <span class="num">${d.getDate()}</span>
+      <span class="dots">${shown.map(e=>`<i class="dot" style="background:${eventColor(e)}"></i>`).join('')}${extra>0?`<span class="more">+${extra}</span>`:''}</span></button>`;
+  }
+  const dayEvs = eventsOn(selected);
+  const waiting = !(loaded.events && loaded.crew);
+  app.innerHTML = `
+    <div class="top">
+      <div class="top-row">
+        <button class="ic" id="prev" aria-label="Previous month">‹</button>
+        <h1>${MONTHS[mo]} ${y}</h1>
+        <button class="ic" id="next" aria-label="Next month">›</button>
+      </div>
+      <div class="top-row2">
+        <div class="seg"><button data-scope="mine" class="${scope==='mine'?'on':''}">Mine</button><button data-scope="all" class="${scope==='all'?'on':''}">Everyone</button></div>
+        <button class="today-btn" id="todayBtn">Today</button>
+      </div>
+      <div class="sync">${waiting ? 'Loading…' : (fromCache ? 'Offline — showing saved copy' : '')}</div>
+    </div>
+    <div class="dow">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div>${d}</div>`).join('')}</div>
+    <div class="grid" id="grid">${cells}</div>
+    <div class="dayhead">${esc(longDate(selected))}<span>${dayEvs.length} event${dayEvs.length===1?'':'s'}</span></div>
+    <div class="list">${dayEvs.length ? dayEvs.map(e=>{
+      const s = e.staffId ? crew.find(c=>c.id===e.staffId) : null;
+      const multi = e.endDate && e.endDate!==e.date;
+      const tm = e.startTime ? esc(e.startTime) + (e.endTime ? '<br>'+esc(e.endTime) : '') : 'All day';
+      const meta = [e.personal ? 'Personal' : categoryByKey(e.type).label, s ? staffName(s) : '', multi ? `${longDate(e.date).replace(/^\w+ /,'')} → ${longDate(e.endDate).replace(/^\w+ /,'')}` : ''].filter(Boolean).join(' · ');
+      const loc = e.location ? `<div class="loc"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.location)}" target="_blank" rel="noopener" data-maps="1">📍 ${esc(e.location)}</a></div>` : '';
+      return `<div class="ev" role="button" tabindex="0" data-ev="${esc(e.id)}"><span class="bar" style="background:${eventColor(e)}"></span><span class="tm">${tm}</span>
+        <span class="body"><div class="ttl">${esc(e.title)}</div><div class="meta">${esc(meta)}</div>${loc}${e.notes?`<div class="note">${esc(e.notes)}</div>`:''}</span></div>`;
+    }).join('') : `<div class="empty">Nothing on this day.</div>`}</div>
+    <button class="fab" id="fab" aria-label="Add event">+</button>`;
+  document.getElementById('prev').onclick = ()=> shiftMonth(-1);
+  document.getElementById('next').onclick = ()=> shiftMonth(1);
+  document.getElementById('todayBtn').onclick = ()=>{ const n = new Date(); anchor = new Date(n.getFullYear(), n.getMonth(), 1); selected = isoOf(n); render(); };
+  app.querySelectorAll('[data-scope]').forEach(b=> b.onclick = ()=>{ scope = b.dataset.scope; lsSet('scope', scope); render(); });
+  app.querySelectorAll('[data-day]').forEach(b=> b.onclick = ()=>{ selected = b.dataset.day; const d = parseIso(selected); if(d.getMonth()!==anchor.getMonth()) anchor = new Date(d.getFullYear(), d.getMonth(), 1); render(); });
+  app.querySelectorAll('[data-ev]').forEach(b=> b.onclick = ev=>{ if(ev.target.closest('[data-maps]')) return; const e = events.find(x=>x.id===b.dataset.ev); if(e) openEditor(e); });
+  document.getElementById('fab').onclick = ()=> openEditor(null);
+  wireSwipe(document.getElementById('grid'));
+}
+function shiftMonth(n){
+  anchor = new Date(anchor.getFullYear(), anchor.getMonth()+n, 1);
+  const d = parseIso(selected);
+  const last = new Date(anchor.getFullYear(), anchor.getMonth()+1, 0).getDate();
+  selected = isoOf(new Date(anchor.getFullYear(), anchor.getMonth(), Math.min(d.getDate(), last)));
+  render();
+}
+function wireSwipe(el){
+  let x0=null, y0=null;
+  el.addEventListener('touchstart', e=>{ x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, {passive:true});
+  el.addEventListener('touchend', e=>{
+    if(x0===null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)*1.6) shiftMonth(dx<0 ? 1 : -1);
+  }, {passive:true});
+}
+
+/* ---------- address suggestions as you type (same Ideal Postcodes account as the tracker's postcode lookup) ---------- */
+const IDEAL_POSTCODES_KEY = 'ak_mowobf7dE7Lufy9K0U8bVsm2JXSON';
+function suggestAddress(input, box){
+  if(!input || !box) return;
+  let timer = null, lastQ = '', seq = 0;
+  const hide = ()=>{ box.innerHTML = ''; box.style.display = 'none'; };
+  async function search(q){
+    const mine = ++seq;
+    try {
+      const res = await fetch('https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses?api_key=' + IDEAL_POSTCODES_KEY + '&query=' + encodeURIComponent(q));
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if(mine !== seq) return;
+      const r = data && data.result;
+      const hits = (r && (r.hits || (Array.isArray(r) ? r : []))) || [];
+      const picks = hits.map(h=> h.suggestion || h.address || '').filter(Boolean).slice(0,6);
+      if(!picks.length){ hide(); return; }
+      box.innerHTML = picks.map((t,i)=>`<button type="button" data-pick="${i}">📍 ${esc(t)}</button>`).join('');
+      box.style.display = 'block';
+      box.querySelectorAll('[data-pick]').forEach(b=>{
+        const choose = ev=>{ ev.preventDefault(); input.value = picks[Number(b.dataset.pick)]; lastQ = input.value; hide(); };
+        b.addEventListener('mousedown', choose); b.addEventListener('touchstart', choose, {passive:false});
+      });
+    } catch(err){ console.warn('Address suggestions unavailable', err); hide(); }
+  }
+  input.addEventListener('input', ()=>{
+    const q = input.value.trim(); clearTimeout(timer);
+    if(q.length < 3){ hide(); return; }
+    if(q===lastQ) return;
+    timer = setTimeout(()=>{ lastQ = q; search(q); }, 300);
+  });
+  input.addEventListener('blur', ()=> setTimeout(hide, 250));
+}
+/* ---------- add / edit event (a full page, not a pop-up) ---------- */
+function openEditor(ev){
+  editingIsNew = !ev;
+  const m = me();
+  editing = ev ? {...ev} : {id:uid(), date:selected, endDate:'', startTime:'', endTime:'', type:'', personal:false, title:'', staffId: m ? m.id : '', notes:''};
+  if(!ev) editing._kind = lsGet('kind') || '';
+  else editing._kind = ev.personal ? 'personal' : 'work';
+  view = 'edit'; render(); window.scrollTo(0,0);
+}
+function renderEditor(app){
+  const e = editing, people = officeCrew().slice();
+  if(e.staffId && !people.some(c=>c.id===e.staffId)){ const p = crew.find(c=>c.id===e.staffId); if(p) people.push(p); }
+  const types = categories().slice();
+  if(e.type && !types.some(t=>t.key===e.type)) types.push(categoryByKey(e.type));
+  app.innerHTML = `<div class="page">
+    <h2>${editingIsNew ? 'Add event' : 'Edit event'}</h2>
+    <div class="field"><label>Work or personal?</label><div class="chips">
+      <button type="button" class="chip ${e._kind==='work'?'sel':''}" data-kind="work">Work</button>
+      <button type="button" class="chip ${e._kind==='personal'?'sel':''}" data-kind="personal">Personal</button></div></div>
+    <div class="field" id="typeField" style="${e._kind==='work'?'':'display:none'}"><label>Type</label><div class="chips">
+      ${types.map(t=>`<button type="button" class="chip ${e.type===t.key?'sel':''}" data-type="${esc(t.key)}">${esc(t.label)}</button>`).join('')}</div></div>
+    <div class="field"><label>Title</label><input id="f_title" value="${esc(e.title)}" placeholder="e.g. Estimate at Miller Homes, or Dentist"></div>
+    <div class="two">
+      <div class="field"><label>Date</label><input type="date" id="f_date" value="${esc(e.date)}"></div>
+      <div class="field"><label>End date (optional)</label><input type="date" id="f_end" value="${esc(e.endDate||'')}"></div></div>
+    <div class="two">
+      <div class="field"><label>Start time (optional)</label><input type="time" step="300" id="f_start" value="${esc(e.startTime||'')}"></div>
+      <div class="field"><label>End time (optional)</label><input type="time" step="300" id="f_stop" value="${esc(e.endTime||'')}"></div></div>
+    <div class="field"><label>Who's this for</label><select id="f_staff">
+      ${people.some(c=>c.id===e.staffId) ? '' : '<option value="">— choose —</option>'}
+      ${people.map(c=>`<option value="${esc(c.id)}" ${e.staffId===c.id?'selected':''}>${esc(staffName(c))}</option>`).join('')}</select></div>
+    <div class="field" style="position:relative;"><label>Location (optional - start typing an address)</label>
+      <input id="f_loc" value="${esc(e.location||'')}" autocomplete="off" placeholder="e.g. 12 Oak Road, Sandbach">
+      <div id="f_locsug" class="sug"></div></div>
+    <div class="field"><label>Notes (optional)</label><textarea id="f_notes" rows="2">${esc(e.notes||'')}</textarea></div>
+    <div class="err" id="ferr"></div>
+    <button class="btn" id="save">${editingIsNew ? 'Add event' : 'Save changes'}</button>
+    <div class="row"><button class="btn ghost" id="cancel">Cancel</button>${editingIsNew ? '' : '<button class="btn danger" id="del">Delete</button>'}</div>
+  </div>`;
+  suggestAddress(document.getElementById('f_loc'), document.getElementById('f_locsug'));
+  const grow = ta=>{ ta.style.height='auto'; ta.style.height = ta.scrollHeight+'px'; };
+  const notes = document.getElementById('f_notes'); grow(notes); notes.oninput = ()=> grow(notes);
+  app.querySelectorAll('[data-kind]').forEach(b=> b.onclick = ()=>{ keepFields(); e._kind = b.dataset.kind; renderEditor(app); });
+  app.querySelectorAll('[data-type]').forEach(b=> b.onclick = ()=>{ keepFields(); e.type = b.dataset.type; renderEditor(app); });
+  function keepFields(){
+    e.title = document.getElementById('f_title').value; e.date = document.getElementById('f_date').value; e.endDate = document.getElementById('f_end').value;
+    e.startTime = document.getElementById('f_start').value; e.endTime = document.getElementById('f_stop').value;
+    e.staffId = document.getElementById('f_staff').value; e.notes = document.getElementById('f_notes').value; e.location = document.getElementById('f_loc').value;
+  }
+  document.getElementById('cancel').onclick = ()=>{ view='cal'; render(); };
+  const del = document.getElementById('del');
+  if(del) del.onclick = async ()=>{
+    if(!confirm('Remove this calendar event?')) return;
+    del.disabled = true;
+    try { await writeEvent('delete', null, e.id); view='cal'; render(); toast('Event removed'); }
+    catch(err){ del.disabled = false; document.getElementById('ferr').textContent = saveError(err); }
+  };
+  document.getElementById('save').onclick = async ()=>{
+    keepFields();
+    const er = document.getElementById('ferr'); er.textContent = '';
+    if(!e.title.trim()) return er.textContent = 'Please add a title.';
+    if(!e.date) return er.textContent = 'Please pick a date.';
+    if(!e._kind) return er.textContent = 'Please choose Work or Personal.';
+    if(e._kind==='work' && !e.type) return er.textContent = 'Please choose the type of work.';
+    if(!e.staffId) return er.textContent = "Please choose who this is for.";
+    if(e.endTime && !e.startTime) return er.textContent = 'Please add a start time as well as the end time.';
+    if(e.endDate && e.endDate < e.date) return er.textContent = 'The end date can\'t be before the start date.';
+    if(e.startTime && e.endTime && (!e.endDate || e.endDate===e.date) && e.endTime <= e.startTime) return er.textContent = 'The end time needs to be after the start time.';
+    const entry = {id:e.id, type: e._kind==='work' ? e.type : '', title:e.title.trim(), date:e.date, endDate:e.endDate||'', startTime:e.startTime||'', endTime:e.endTime||'', staffId:e.staffId, personal:e._kind==='personal', location:(e.location||'').trim(), notes:e.notes||''};
+    const b = document.getElementById('save'); b.disabled = true; b.textContent = 'Saving…';
+    try {
+      await writeEvent('save', entry);
+      lsSet('kind', e._kind);
+      selected = entry.date; const d = parseIso(entry.date); anchor = new Date(d.getFullYear(), d.getMonth(), 1);
+      view='cal'; render(); toast(editingIsNew ? 'Event added' : 'Saved');
+    } catch(err){ b.disabled = false; b.textContent = editingIsNew ? 'Add event' : 'Save changes'; er.textContent = saveError(err); }
+  };
+}
+function saveError(err){
+  if(err && err.code==='permission-denied') return "Couldn't save — the database didn't allow it. Try signing in again.";
+  if(err && (err.code==='unavailable' || /fetch|network/i.test(err.message||''))) return "Couldn't save — no connection. Check your internet and try again.";
+  return "Couldn't save (" + ((err && (err.code||err.message)) || 'unknown') + ').';
+}
+
+/* ---------- data + sign-in ---------- */
+function listen(key, apply){
+  db.collection('eccData').doc(key).onSnapshot({includeMetadataChanges:true}, snap=>{
+    if(snap.exists && snap.data().value!==undefined){ apply(snap.data().value); if(key==='officeCalendar') fromCache = snap.metadata.fromCache; }
+    else if(!snap.metadata.fromCache) apply(key==='settings' ? {} : []);
+    if(view!=='edit') render();
+  }, err=>{ console.error('listener', key, err); fromCache = true; if(view!=='edit') render(); });
+}
+let started = false;
+auth.onAuthStateChanged(u=>{
+  user = u; authChecked = true;
+  if(u && !u.isAnonymous && !started){
+    started = true;
+    listen('officeCalendar', v=>{ events = Array.isArray(v) ? v.filter(e=>e && e.id!=null && e.date) : []; loaded.events = true; });
+    listen('crew', v=>{ crew = Array.isArray(v) ? v : []; loaded.crew = true; });
+    listen('settings', v=>{ settings = v && typeof v==='object' ? v : {}; });
+  }
+  render();
+});
+render();
+</script>
+</body>
+</html>
