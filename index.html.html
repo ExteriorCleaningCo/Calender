@@ -130,7 +130,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-auth-compat.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
 <script>
-const BUILD_VERSION = '2026-10-07-phone-calendar-6';
+const BUILD_VERSION = '2026-10-08-phone-calendar-7';
 firebase.initializeApp({
   apiKey: "AIzaSyDVpT49n-X6bkFIQCZJT9PQmBeeTRkHcDk",
   authDomain: "exterior-cleaning-co.firebaseapp.com",
@@ -601,6 +601,7 @@ function openEditor(ev, preset){
   const m = me();
   editing = ev ? {...ev} : {id:uid(), date:(preset && preset.date) || newEventDate(), startTime:(preset && preset.startTime)||'', endTime:(preset && preset.endTime)||'', endDate:'', type:'', personal:false, title:'', staffId: m ? m.id : '', notes:''};
   if(ev && isMulti(ev) && preset && preset.day && preset.day>=ev.date && preset.day<=ev.endDate){ editing._day = preset.day; editing._scope = 'all'; editing._orig = {date:ev.date, endDate:ev.endDate}; }
+  editing._general = !!(ev && !ev.staffId);
   if(!ev) editing._kind = lsGet('kind') || '';
   else editing._kind = ev.personal ? 'personal' : 'work';
   screen = 'edit'; render(); window.scrollTo(0,0);
@@ -628,7 +629,8 @@ function renderEditor(app){
       <div class="field"><label>Start time (optional)</label><input type="time" step="300" id="f_start" value="${esc(e.startTime||'')}"></div>
       <div class="field"><label>End time (optional)</label><input type="time" step="300" id="f_stop" value="${esc(e.endTime||'')}"></div></div>
     <div class="field"><label>Who's this for</label><select id="f_staff">
-      ${people.some(c=>c.id===e.staffId) ? '' : '<option value="">— choose —</option>'}
+      ${(e._general || people.some(c=>c.id===e.staffId)) ? '' : '<option value="">— choose —</option>'}
+      <option value="__general__" ${e._general?'selected':''}>General — everyone (not for one person)</option>
       ${people.map(c=>`<option value="${esc(c.id)}" ${e.staffId===c.id?'selected':''}>${esc(staffName(c))}</option>`).join('')}</select></div>
     <div class="field"><label>Colour</label><div class="sw">
       <button type="button" class="auto ${e.color?'':'sel'}" data-color="">Automatic</button>
@@ -667,7 +669,7 @@ function renderEditor(app){
   function keepFields(){
     e.title = document.getElementById('f_title').value; e.date = document.getElementById('f_date').value; e.endDate = document.getElementById('f_end').value;
     e.startTime = document.getElementById('f_start').value; e.endTime = document.getElementById('f_stop').value;
-    e.staffId = document.getElementById('f_staff').value; e.notes = document.getElementById('f_notes').value; e.location = document.getElementById('f_loc').value;
+    const sv = document.getElementById('f_staff').value; e._general = sv==='__general__'; e.staffId = e._general ? '' : sv; e.notes = document.getElementById('f_notes').value; e.location = document.getElementById('f_loc').value;
     if(e._manual){ e._m1 = document.getElementById('m_1').value; e._m2 = document.getElementById('m_2').value; e._m3 = document.getElementById('m_3').value; }
   }
   document.getElementById('cancel').onclick = ()=>{ screen='cal'; render(); };
@@ -685,7 +687,8 @@ function renderEditor(app){
     if(!e.date) return er.textContent = 'Please pick a date.';
     if(!e._kind) return er.textContent = 'Please choose Work or Personal.';
     if(e._kind==='work' && !e.type) return er.textContent = 'Please choose the type of work.';
-    if(!e.staffId) return er.textContent = "Please choose who this is for.";
+    if(!e.staffId && !e._general) return er.textContent = "Please choose who this is for.";
+    if(e._general && e._kind==='personal') return er.textContent = "A general event can't be Personal - pick Work, or choose a person.";
     if(e.endTime && !e.startTime) return er.textContent = 'Please add a start time as well as the end time.';
     if(e.endDate && e.endDate < e.date) return er.textContent = 'The end date can\'t be before the start date.';
     if(e.startTime && e.endTime && e.endTime <= e.startTime) return er.textContent = 'The end time needs to be after the start time.';
